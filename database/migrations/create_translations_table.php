@@ -17,7 +17,7 @@ return new class () extends Migration {
             $table->string('translatable_type');
             $table->unsignedBigInteger('translatable_id');
             $table->string('locale');
-            $table->json('translations');
+            $table->json('translations')->nullable();
             $table->timestamps();
 
             $table->index(['translatable_type', 'translatable_id']);

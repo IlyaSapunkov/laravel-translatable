@@ -7,13 +7,12 @@ namespace IlyaSapunkov\Translatable\Traits;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Arr;
 use IlyaSapunkov\Translatable\Models\Locale;
 use IlyaSapunkov\Translatable\Models\Translation;
 
 trait Translatable
 {
-    protected array $translatableFields = [];
-
     /**
      * Магический метод для получения атрибутов.
      *
@@ -66,10 +65,10 @@ trait Translatable
      */
     public function getTranslation(string $field): mixed
     {
-        /** @var Translation $translations */
-        $translations = $this->currentTranslation()->firstOrCreate();
+        /** @var Translation $translation */
+        $translation = $this->translation()->firstOrCreate(['locale' => app()->getLocale()]);
 
-        return $translations?->translations?->$field;
+        return Arr::get($translation->translations ?? [], $field);
     }
 
     /**
@@ -80,10 +79,13 @@ trait Translatable
      */
     public function setTranslation(string $field, mixed $value): void
     {
-        /** @var Translation $translations */
-        $translations = $this->currentTranslation()->firstOrNew();
-        $translations->translations->$field = $value;
-        $translations->save();
+        /** @var Translation $translation */
+        $translation = $this->translation()->firstOrCreate(['locale' => app()->getLocale()]);
+
+        $translations = $translation->translations ?? [];
+        $translations = Arr::set($translations, $field, $value);
+        $translation->translations = $translations;
+        $translation->save();
     }
 
     /**
@@ -104,15 +106,6 @@ trait Translatable
                 ->where("translations->$field", '<>', '')
                 ->whereNotNull("translations->$field");
         });
-    }
-
-    /**
-     * Получает переводы для текущей локали.
-     */
-    public function currentTranslation(): MorphOne
-    {
-        return $this->morphOne(Translation::class, 'translatable')
-            ->where('locale', app()->getLocale());
     }
 
     /**
