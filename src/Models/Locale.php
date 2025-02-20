@@ -23,16 +23,4 @@ class Locale extends Model
     protected $attributes = [
         'active' => 1,
     ];
-
-    /**
-     * Атрибуты, для которых разрешено массовое присвоение значений.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-        'name_short',
-        'iso',
-        'active',
-    ];
 }

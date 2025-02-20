@@ -6,7 +6,6 @@ namespace IlyaSapunkov\Translatable\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Arr;
 use IlyaSapunkov\Translatable\Models\Locale;
 use IlyaSapunkov\Translatable\Models\Translation;
