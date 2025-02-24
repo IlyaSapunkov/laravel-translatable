@@ -17,6 +17,7 @@ class Translation extends Model
         'translatable_type',
         'translatable_id',
         'translations',
+        'locale',
     ];
 
     protected $casts = [
