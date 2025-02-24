@@ -15,6 +15,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Locale extends Model
 {
+
+    protected $table = 'locales';
+
     /**
      * Значения по умолчанию для атрибутов модели.
      *
