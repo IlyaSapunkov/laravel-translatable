@@ -14,8 +14,14 @@ class TranslatableServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->publishes([
-            __DIR__ . '/../../database/migrations' => database_path('migrations'),
-        ], 'translatable-migrations');
+        if ($this->app->runningInConsole()) {
+            $publishesMigrationsMethod = method_exists($this, 'publishesMigrations')
+                ? 'publishesMigrations'
+                : 'publishes';
+
+            $this->{$publishesMigrationsMethod}([
+                __DIR__ . '/../../database/migrations' => database_path('migrations'),
+            ], 'translatable-migrations');
+        }
     }
 }
